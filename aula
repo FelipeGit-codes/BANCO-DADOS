@@ -1,0 +1,101 @@
+create database if not exists clinica;
+use clinica;
+
+-- Relacionamento 1:1 (um pra um)
+-- Um prontuário pertence a um único paciente
+
+create table Pacientes (
+idpaciente int primary key auto_increment,
+nome varchar(100) not null,
+idade int not null,
+telefone varchar (20)
+);
+
+create table Prontuário(
+idprontuario int primary key auto_increment,
+id_paciente int unique, -- Imepede que uma paciente tenha mais de um ID
+numeroprontuaria int not null,
+tipo_sanguineo varchar(5),
+observacao text,
+foreign key (id_paciente) references Pacientes (idpacientes)
+);
+
+-- Relacionamento 1:N (um para muitos)
+-- Um Médico pode realizar várias consultas
+--  Cada consulta pertence a um único médico
+
+create table Medicos (
+idmedico int primary key auto_increment,
+id_paciente int,
+id_medico int,
+data_consulta date
+);
+
+create table Consultas (
+idconsulta int primary key auto_increment,
+id_paciente int,
+id_medico int,
+data_consulta date,
+valor decimal(10,2),
+foreign key (id_paciente) references Pacientes(idpaciente),
+foreign key (id_medico) references Medicos (idmedico)
+);
+
+-- Relacionamento N:N (Muitos para muitos)
+-- Um exame pode estar em varias consultas
+
+create table Exames (
+idexame int primary key auto_increment,
+nome varchar(100),
+preco decimal(10,2)
+);
+
+create table consulta_exames (
+id_consylta int,
+id_exame int,
+primary key (id_consulta, id_exame),
+foreign key (id_consulta) references Consultas (idconsulta),
+foreign key (id_exame) references Exames (idexame)
+);
+
+insert into Pacientes (nome, idade, telefone)
+values ('Carlos Silva', 35, '719999999'),
+('Maria Santos', 28, '78998555858'),
+('João Oliveira', 45, '719898565656');
+
+select * from Pacientes;
+
+show tables;
+
+insert into Prontuarios (id_pacientes,numeropronturaria,tipo_sanguineo)
+values (1,1,'0+','Hipertenso'),
+(2,2,'A+', 'Sem obaervações'),
+(3,3,'B+', 'Alergia a medicamentos');
+
+select * from Prontuarios;
+
+insert into Medicos (nome, especialidade)
+values('Roberto Almeida', 'cardiologia'),
+('Fernanda Lima', 'Pediatra'),
+('Marcos Pereira', 'Dematologia');
+
+select * from Medicos;
+
+insert into Consultas (id_paciente, id_medico, data_consulta,valor)
+values
+
+-- Order by
+
+
+-- Pacientes em ordem alfabética
+select * from Pacientes
+order by nome asc;
+
+select * from Pacientes
+order by nome asc;
+
+select * from Consulta
+order by data_consulta desc;
+
+select * from Pacientes
+order by idade desc, nome asc;
